@@ -3,20 +3,17 @@ package guru.springframework.spring5webapp.bootstrap;
 import guru.springframework.spring5webapp.domain.Author;
 import guru.springframework.spring5webapp.domain.Book;
 import guru.springframework.spring5webapp.domain.Publisher;
-import guru.springframework.spring5webapp.domain.repositories.AuthorRepository;
-import guru.springframework.spring5webapp.domain.repositories.BookRepository;
-import guru.springframework.spring5webapp.domain.repositories.PublisherRepository;
+import guru.springframework.spring5webapp.repositories.AuthorRepository;
+import guru.springframework.spring5webapp.repositories.BookRepository;
+import guru.springframework.spring5webapp.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 /**
- * @author cmchenming13@gmail.com
- * @date 2021/7/28 18:18
+ * Created by jt on 12/23/19.
  */
-
 @Component
 public class BootStrapData implements CommandLineRunner {
-
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
@@ -31,31 +28,42 @@ public class BootStrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        System.out.println("Started in Bootstrap");
+
+        Publisher publisher = new Publisher();
+        publisher.setName("SFG Publishing");
+        publisher.setCity("St Petersburg");
+        publisher.setState("FL");
+
+        publisherRepository.save(publisher);
+
+        System.out.println("Publisher Count: " + publisherRepository.count());
+
         Author eric = new Author("Eric", "Evans");
         Book ddd = new Book("Domain Driven Design", "123123");
         eric.getBooks().add(ddd);
         ddd.getAuthors().add(eric);
 
+        ddd.setPublisher(publisher);
+        publisher.getBooks().add(ddd);
+
         authorRepository.save(eric);
         bookRepository.save(ddd);
+        publisherRepository.save(publisher);
 
-
-        Author rod = new Author("Rod", "Jphnson");
-        Book noEJB = new Book("J2EE Development without EJB", "39393939393");
+        Author rod = new Author("Rod", "Johnson");
+        Book noEJB = new Book("J2EE Development without EJB", "3939459459");
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
+
+        noEJB.setPublisher(publisher);
+        publisher.getBooks().add(noEJB);
+
         authorRepository.save(rod);
+        bookRepository.save(noEJB);
+        publisherRepository.save(publisher);
 
-
-        Publisher mysa = new Publisher("mysa", "401 Terry St.", "Seattle", "Washington", "98109" );
-        Publisher epic = new Publisher("epic", "401 Terry St.", "Seattle", "Washington", "98109" );
-        publisherRepository.save(mysa);
-        publisherRepository.save(epic);
-
-
-        System.out.println("Started");
         System.out.println("Number of Books: " + bookRepository.count());
-        System.out.println("Number of publishers: " + publisherRepository.count());
+        System.out.println("Publisher Number of Books: " + publisher.getBooks().size());
     }
 }
-

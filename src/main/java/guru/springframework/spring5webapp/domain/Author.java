@@ -8,7 +8,6 @@ import java.util.Set;
  * @author cmchenming13@gmail.com
  * @date 2021/7/27 21:46
  */
-
 @Entity
 public class Author {
 
@@ -20,8 +19,6 @@ public class Author {
 
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
-
-
     public Author() {
     }
 
@@ -61,7 +58,6 @@ public class Author {
     public void setBooks(Set<Book> books) {
         this.books = books;
     }
-
 
     @Override
     public String toString() {
